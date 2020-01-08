@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1f1f1f">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#1f1f1f">
+    <meta name="msapplication-TileColor" content="#1f1f1f">
+    <meta name="theme-color" content="#1f1f1f">
+
+    <title>2048</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <script src="js/compiled/clojurescript_2048.js" type="text/javascript"></script>
+    <div id="center-column">
+      <div id="top-row">
+        <div id="heading">2048</div>
+        <div id="high-scoreboard" class="paragraph-block">
+            <div id="high-score-label">High Score:</div>
+            <div id="high-score">0</div>
+        </div>
+      </div>
+
+      <noscript>
+        <div id="noscript-alert" class="paragraph-block margin-bottom">
+          <span>
+            You must have Javascript enabled to run this game.
+            <a target="_blank" href="http://activatejavascript.org/en/instructions">Click here</a>
+            for directions on how to enable Javascript in your browser.
+          </span>
+        </div>
+      </noscript>
+      <div id="board-container">
+        <div id="lost-notif" class="notif">
+          <h3 class="lost-notif-row">GAME OVER</h3>
+          <h2 class="lost-notif-row">No more moves are possible.</h2>
+          <div class="lost-notif-row">
+            <div id="new-game-button" class="button standalone-button">New Game</div>
+          </div>
+        </div>
+        <div id="won-notif" class="notif">
+          <h3 class="won-notif-row">CONGRATULATIONS!</h3>
+          <h2 class="won-notif-row">You got to the 2048 tile and won!</h2>
+          <div class="won-notif-row">
+            <div id="new-game-button-2" class="button standalone-button">New Game</div>
+          </div>
+          <div class="won-notif-row">
+            <div id="keep-going-button" class="button standalone-button">Keep Going</div>
+          </div>
+        </div>
+        <div id="board">
+          <div class="row">
+            <div class="cell-space">
+              <div id="tile-root"></div>
+              <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+            <div class="cell-space">
+                <div class="cell"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="control-panel">
+        <div id="scoreboard">
+          <div id="score-label">Score:</div>
+          <div id="score">
+            <div id="total-score">0</div>
+            <div id="turn-score">+8</div>
+          </div>
+        </div>
+        <div id="reset-button" class="button">Reset</div>
+      </div>
+      <div class="paragraph-block">
+        Shift the tiles with wasd, the arrow keys, or by swiping your screen.
+        Reset the game with r.
+      </div>
+      <div class="paragraph-block margin-bottom">
+        <span>
+          This is a fan game made by <a href="https://github.com/BranDougherty">Brendan Dougherty</a>,
+          based off the version by
+          <a href="https://play2048.co/">Gabriele Cirulli</a> and it's predecessors.
+        </span>
+      </div>
+    </div>
+  </body>
+</html>
+
