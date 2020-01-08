@@ -215,12 +215,6 @@
             (reset! game-logic/game-state (reader/read-string read-state))))
         (swap! game-logic/game-state (fn [old-state]
                                        (assoc old-state :state :playing)))
-        (swap! game-logic/game-state (fn [old-state]
-                                       (assoc old-state :board
-                                              [[nil nil nil nil]
-                                               [nil nil nil nil]
-                                               [nil nil nil nil]
-                                               [nil nil {:id 0 :value 1024} {:id 1 :value 1024}]])))
         (update-score game-logic/game-state)
         (animate-turn game-logic/empty-board (:board @game-logic/game-state) [])
         (goog.object/set js/window "onkeydown"

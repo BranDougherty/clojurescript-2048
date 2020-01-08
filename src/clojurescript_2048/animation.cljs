@@ -1,5 +1,7 @@
 (ns clojurescript-2048.animation
-  (:require [clojurescript-2048.js-util :as jsu]))
+  (:require [clojurescript-2048.js-util :as jsu]
+            [goog.string :as gs]
+            [goog.string.format]))
 
 ; The list of currently running animations.
 (def animations (atom []))
@@ -35,7 +37,7 @@
 
 (defn transformation-value
   [transformation percent-elapsed]
-  (let [new-value (goog.string/format "%f" ((:tween-function transformation)
+  (let [new-value (gs/format "%f" ((:tween-function transformation)
                                               percent-elapsed
                                               (:initial-value transformation)
                                               (:target-value transformation)))]
@@ -43,7 +45,7 @@
 
 (defn finished-transformation-value
   [transformation]
-  (let [final-value (goog.string/format "%f" (:target-value transformation))]
+  (let [final-value (gs/format "%f" (:target-value transformation))]
     (str (:function transformation) "(" final-value (:unit transformation) ")")))
 
 (defn process-transformations
