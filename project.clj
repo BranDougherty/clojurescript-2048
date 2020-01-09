@@ -1,8 +1,8 @@
 (defproject clojurescript-2048 "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :description "2048 implemented in clojurescript."
+  :url "https://brandougherty.github.io/clojurescript-2048/"
+  :license {:name "The MIT License"
+            :url "https://mit-license.org/"}
 
   :min-lein-version "2.9.1"
 
