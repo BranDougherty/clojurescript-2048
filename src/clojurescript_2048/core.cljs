@@ -7,16 +7,19 @@
             [clojurescript-2048.js-util :as jsu]))
 
 (def keycode-to-command {
-                           37 :left  ; left arrow
-                           65 :left  ; a
-                           38 :up    ; up arrow
-                           87 :up    ; w
-                           39 :right ; right arrow
-                           68 :right ; d
-                           40 :down  ; down arrow
-                           83 :down  ; s
-                           82 :reset ; r
-                           })
+                         37 :left       ; left arrow
+                         65 :left       ; a
+                         38 :up         ; up arrow
+                         87 :up         ; w
+                         39 :right      ; right arrow
+                         68 :right      ; d
+                         40 :down       ; down arrow
+                         83 :down       ; s
+                         82 :reset      ; r
+                         75 :keep-going ; k
+                         78 :pressed-n  ; n
+                         89 :pressed-y  ; y
+                         })
 
 (defn is-command
   [keycode]
@@ -129,6 +132,25 @@
                                             :duration anim/ANIMATION-LENGTH
                                             }))) 1000)))
 
+(defn display-reset-dialog
+  []
+  (let [ele (.getElementById js/document "reset-dialog")]
+    (anim/add-animation {
+                         :transitions
+                         [
+                          {
+                           :property "opacity"
+                           :unit ""
+                           :initial-value 0.0
+                           :target-value 1.0
+                           :duration anim/ANIMATION-LENGTH
+                           :tween-function anim/linear-tween
+                           }
+                          ]
+                         :ele ele
+                         :duration anim/ANIMATION-LENGTH
+                         })
+    (jsu/set-style ele "visibility" "visible")))
 
 (defn hide-losing-notif
   []
@@ -142,11 +164,25 @@
     (jsu/set-style ele "visibility" "hidden")
     (jsu/set-style ele "opacity" "0.0")))
 
+(defn hide-reset-dialog
+  []
+  (let [ele (.getElementById js/document "reset-dialog")]
+    (jsu/set-style ele "visibility" "hidden")
+    (jsu/set-style ele "opacity" "0.0")))
+
 (defn keep-going
   []
-  (hide-winning-notif)
-  (swap! game-logic/game-state (fn [old-state]
-                                 (assoc old-state :state :playing))))
+  (when (= (:state @game-logic/game-state) :won)
+    (hide-winning-notif)
+    (swap! game-logic/game-state (fn [old-state]
+                                   (assoc old-state :state :playing)))))
+
+(defn reset-no
+  []
+  (when (= (:state @game-logic/game-state) :resetting)
+    (hide-reset-dialog)
+    (swap! game-logic/game-state (fn [old-state]
+                                   (assoc old-state :state :playing)))))
 
 (defn do-move
   [direction]
@@ -183,11 +219,20 @@
 
           (write-state @game-logic/game-state))))))
 
+(defn maybe-reset
+  []
+  (when (= (:state @game-logic/game-state) :playing)
+    (swap! game-logic/game-state (fn [old-state]
+                                   (assoc old-state :state :resetting)))
+    (anim/finish-all-animations)
+    (display-reset-dialog)))
+
 (defn reset
   []
+  (anim/finish-all-animations)
   (hide-losing-notif)
   (hide-winning-notif)
-  (anim/finish-all-animations)
+  (hide-reset-dialog)
   (jsu/remove-all-children (.getElementById js/document "tile-root"))
   (game-logic/reset-state game-logic/game-state)
   (update-score game-logic/game-state)
@@ -196,6 +241,20 @@
                                  (assoc old-state :state :playing)))
   (write-state @game-logic/game-state))
 
+(defn pressed-n
+  []
+  (let [state (:state @game-logic/game-state)]
+    (when (or (= state :won)
+              (= state :lost))
+              (reset))
+    (when (= state :resetting)
+      (reset-no))))
+
+(defn pressed-y
+  []
+  (when (= (:state @game-logic/game-state) :resetting)
+    (reset)))
+
 (defn process-command
   [command]
   (case command
@@ -203,28 +262,33 @@
     :up (do-move :up)
     :right (do-move :right)
     :down (do-move :down)
-    :reset (reset)
+    :keep-going (keep-going)
+    :reset (maybe-reset)
+    :pressed-n (pressed-n)
+    :pressed-y (pressed-y)
     nil ()))
 
 (goog.object/set js/window "onload"
-      (fn []
-        (anim/init)
-        (let [read-state (get-state)]
-          (if (nil? read-state)
-            (game-logic/reset-state game-logic/game-state)
-            (reset! game-logic/game-state (reader/read-string read-state))))
-        (swap! game-logic/game-state (fn [old-state]
-                                       (assoc old-state :state :playing)))
-        (update-score game-logic/game-state)
-        (animate-turn game-logic/empty-board (:board @game-logic/game-state) [])
-        (goog.object/set js/window "onkeydown"
-              (fn [e]
-                (when (is-command (.-keyCode e))
-                  (.preventDefault e)
-                  (process-command (keycode-to-command (.-keyCode e))))))
-        (goog.object/set (.getElementById js/document "reset-button") "onclick" reset)
-        (goog.object/set (.getElementById js/document "keep-going-button") "onclick" keep-going)
-        (goog.object/set (.getElementById js/document "new-game-button-2") "onclick" reset)
-        (goog.object/set (.getElementById js/document "new-game-button") "onclick" reset)
-        (swipe/init-listeners "board" do-move)))
+                 (fn []
+                   (anim/init)
+                   (let [read-state (get-state)]
+                     (if (nil? read-state)
+                       (game-logic/reset-state game-logic/game-state)
+                       (reset! game-logic/game-state (reader/read-string read-state))))
+                   (swap! game-logic/game-state (fn [old-state]
+                                                  (assoc old-state :state :playing)))
+                   (update-score game-logic/game-state)
+                   (animate-turn game-logic/empty-board (:board @game-logic/game-state) [])
+                   (goog.object/set js/window "onkeydown"
+                                    (fn [e]
+                                      (when (is-command (.-keyCode e))
+                                        (.preventDefault e)
+                                        (process-command (keycode-to-command (.-keyCode e))))))
+                   (goog.object/set (.getElementById js/document "reset-button") "onclick" maybe-reset)
+                   (goog.object/set (.getElementById js/document "keep-going-button") "onclick" keep-going)
+                   (goog.object/set (.getElementById js/document "new-game-button-2") "onclick" reset)
+                   (goog.object/set (.getElementById js/document "new-game-button") "onclick" reset)
+                   (goog.object/set (.getElementById js/document "yes-reset-button") "onclick" reset)
+                   (goog.object/set (.getElementById js/document "no-reset-button") "onclick" reset-no)
+                   (swipe/init-listeners "board" do-move)))
 
