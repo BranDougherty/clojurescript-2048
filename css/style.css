@@ -215,6 +215,7 @@ h3 {
 }
 
 #board-container {
+  user-select: none;
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -262,6 +263,21 @@ h3 {
   height: 25%;
 }
 
+#reset-dialog {
+  background-color: rgba(17, 17, 17, .8);
+}
+
+.reset-dialog-row {
+  height: 50%;
+}
+
+#reset-buttons-container {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
 #board {
   padding-left: 3.61445783133%;
   padding-top: 3.61445783133%;
@@ -300,8 +316,26 @@ h3 {
   border-radius: 5px;
 }
 
+.button p {
+  margin: 0;
+}
+
+.button p::first-letter {
+  text-decoration: underline;
+}
+
 .button:hover {
   background-color: #2a2a2a;
+}
+
+.floating-button {
+  box-shadow: 0 0 20px #000;
+}
+
+.reset-button {
+  margin-left: auto;
+  margin-right: auto;
+  width: 25%;
 }
 
 .standalone-button {
