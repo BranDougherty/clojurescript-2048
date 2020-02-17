@@ -89,7 +89,12 @@ body {
 }
 
 h2 {
+  font-size: calc(18px + 1vw);
   margin: 0;
+}
+
+h3 {
+  font-size: calc(16px + 1vw);
 }
 
 .cell-space {
@@ -314,6 +319,7 @@ h3 {
   background-color: #1f1f1f;
   color: #afafaf;
   border-radius: 5px;
+  user-select: none;
 }
 
 .button p {
