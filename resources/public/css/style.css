@@ -89,7 +89,12 @@ body {
 }
 
 h2 {
+  font-size: calc(18px + 1vw);
   margin: 0;
+}
+
+h3 {
+  font-size: calc(16px + 1vw);
 }
 
 .cell-space {
